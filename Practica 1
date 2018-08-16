@@ -1,0 +1,81 @@
+##Ejercicio 1:Generar los vectores siguientes: 
+#a)
+c(1:15)
+#b)
+c(15:1)
+#c)
+c(1:15, 15:1)
+#d) asignale el nombre tiempo
+tiempo<-c(2,7,8)
+tiempo
+#e)
+rep(c(1,7,9), times=10)
+##no entendi el inciso e) profe
+
+#f)
+rep(c(2,3,9),c(9,15,0))
+
+#g)
+rep(c(7,0,5),c(12,25,35))
+
+##Ejercicio 2
+set.seed(50)
+##produce numero aleatorios
+vector1 <- sample(0:999, 250, replace=T)
+vector1
+##se crea un vector llamado vector 1 con 250 numero aleatorios 
+##entre 0 y 999 y los numeros pueden o no repetirse
+vector2 <- sample(0:999, 250, replace=T)
+##se crea un vector llamado vector 2 con 250 numero aleatorios 
+##entre 0 y 999 y los numeros pueden o no repetirse
+
+##matrices
+##1
+m<-matrix(c(1,5,-2,1,2,-1,3,6,3),3)
+m
+##a)
+matrix(c((m[,2]+m[,3]),1,2,-1,3,6,3),3)
+
+
+##2
+s<-matrix(c(sample(0:9,72,replace=T)), nrow=8, ncol=9, byrow=F)
+s
+
+##b)
+s[1,3]
+
+##c)
+o <- matrix(0:24,nrow=5, byrow=T)
+o
+nrow(o)
+
+##d)
+p <- c(s[ ,7])
+p
+
+##e)
+veccol <- c(colSums(s[1:8, ]))
+veccol
+vecrow <- c(rowSums(s[ ,1:9]))
+vecrow
+
+##f)
+##cambie a m porque ya tenia la matris s
+m<- matrix(1:20, nrow=4, ncol=5, byrow = T)
+
+#media de la columna 5
+mean(m[ , 5])
+
+# varianza del renglon 2
+var(m[2, ])
+
+rowMeans(s)
+colMeans(s)
+#la media mas alta  es la de la fila 4 
+#la media mas alta de las columnas es la5
+
+##g)
+cbind(s,rep(1,8))
+
+##h)
+rbind(m,rep(0,5))
