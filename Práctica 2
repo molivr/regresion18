@@ -1,0 +1,35 @@
+x<-c(.4,.42,.48,.51,.57,.60,.7,.75,.75,.78,.84,.95,.99,1.03,
+     1.12,1.15,1.20,1.25,1.25,1.28,1.3,1.34,1.37,1.4,1.43,
+     1.46,1.49,1.55,1.58,1.6)
+y<-c(1.02,1.21,.88,.98,1.52,1.83,1.5,1.8,1.74,1.63,2,2.8,
+     2.48,2.47,3.05,3.18,3.76,3.68,3.82,3.21,4.27,3.12,3.99,
+     3.75,4.1,4.18,3.77,4.34,4.21,4.92)
+
+df<-data.frame(x,y)
+  
+install.packages("ggplot2")
+library("ggplot2")
+
+##1.-Grafica de dispersión
+ggplot(data=NULL,aes(x=x,y=y))+ geom_point() + geom_smooth(method=("lm"))
+
+##a)Tipo de relación: Positiva
+##b)Identificar "outliers"
+
+num.outliers<-2
+mah.ordenacion <- order(mahalanobis(df , colMeans(df),
+                                    cov(df)), decreasing=TRUE)
+
+##c)Fuerza de la Relación: Alta
+##d)Eliminar "outliers" identificados
+
+outlier<-rep(FALSE,nrow(df))
+outlier[mah.ordenacion[1:num.outliers]]<-TRUE
+colorear.outlier<-outlier*16
+plot(df, pch=0)+ points(df, pch=colorear.outlier)
+
+
+Graficasinoutliders<-df[-c(22,21),]
+ggplot(Graficasinoutliders, aes(x=x,y=y))+geom_point()
+         +ggtitle("Grafica sin outliders")
+         +geom_smooth(method = lm)
