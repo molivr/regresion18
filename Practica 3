@@ -1,0 +1,27 @@
+x<-c(132,129,120,113.2,105,92,84,83.2,88.4,59,80,81.5,71,69.2)
+x
+y<-c(46,48,51,52.1,54,52,59,58.7,61.6,64,61.4,54.6,58.8,58)
+y
+
+#Grafica de dispersion
+ggplot(data=NULL,aes(x=x,y=y))+ geom_point() 
+
+##Describe la grafica
+##La grafica presenta una fuerza media y una direccion negativa
+
+##Calcula B0 y B1
+#Para B1
+num1<-c(sum((x-mean(x))*(y-mean(y))))
+den1<-c(sum((x-mean(x))*(x-mean(x))))
+
+b1<-c(num1/den1)
+
+b1
+
+#Para B0
+b0<-c((sum(y)-b1*sum(x))/14)
+b0
+
+#Graficar la recta con la grafica de dispersion 
+
+ggplot(data=NULL,aes(x=x,y=y))+ geom_point() + geom_smooth(method=("lm"))
