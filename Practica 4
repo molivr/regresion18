@@ -13,7 +13,7 @@ b1=sxy/sxx
 b1 
 
 #b0
-b0<-c((sum(y)-b1*sum(x))/21)
+b0<-c((sum(y)-b1*sum(x))/20)
 b0
 
 #Y circunflejo
