@@ -1,0 +1,47 @@
+x<-c(50, 50, 80, 80, 110,110,140,140, 170,170)
+y<-c(17052, 14063,26264,19600,21952,26362,26362,26754,31654,32928)
+
+##Calcula B0 y B1
+#Para B1
+num1<-c(sum((x-mean(x))*(y-mean(y))))
+den1<-c(sum((x-mean(x))*(x-mean(x))))
+
+b1<-c(num1/den1)
+
+b1
+
+#Para B0
+b0<-c((sum(y)-b1*sum(x))/10)
+b0
+
+ym<-b0+b1*x
+
+#residuos
+res<-y-ym
+res
+#SSE
+sse<-c(sum(res^2))
+
+#SIGMA^2
+s2<-sse/(8)
+s2
+#S
+sqrt(s2)
+#SST
+sst=sum(y^2)-(sum(y)^2)/10
+sst
+#r^2
+r2=1-(sse/sst)
+r2
+
+sb1<-sqrt(s2)/sqrt(den1)
+sb1
+
+##Intervalo de Confianza
+
+t<-c(2.306)
+
+intp<-b1+t*sb1
+intp
+intn<-b1-t*sb1
+intn
