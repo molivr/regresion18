@@ -1,0 +1,372 @@
+set.seed(1410) # Base de datos
+dsmall <- diamonds[sample(nrow(diamonds), 100), ]
+dsmall
+ 
+#uso de qplot() con diferentes argumentos
+ 
+#mostrando una relacion entre carat y precio
+qplot(carat, price, data = diamonds)
+ 
+#Si la relacion se quiere ver exponencial
+qplot(log(carat), log(price), data = diamonds)
+ 
+#argumentos x y z
+qplot(carat, x * y * z,data = diamonds)
+ 
+#Color, forma y otros atributos esteticos
+ 
+#Usar varios colores 
+qplot(carat, price, data = dsmall, colour = color)
+ 
+#Usar formas
+qplot(carat, price, data = dsmall, shape = cut)
+ 
+#color degradado
+qplot(carat, price, data = diamonds, alpha = I(1/10))
+qplot(carat, price, data = diamonds, alpha = I(1/100)) 
+qplot(carat, price, data = diamonds, alpha = I(1/200))
+ 
+#Añadiendo una funcion 
+qplot(carat, price, data = dsmall, geom = c("point", "smooth")) 
+qplot(carat, price, data = diamonds, geom = c("point", "smooth")) 
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"), span = 0.2)
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"), span = 1)
+ 
+library(mgcv)
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"), method = "gam", formula = y ~ s(x))
+qplot(carat, price, data = dsmall, geom = c("point", "smooth"), method = "gam", formula = y ~ s(x, bs = "cs"))
+ 
+#boxplots
+qplot(color, price/carat, data=diamonds, geom = "jitter", alpha= I(1/5))
+qplot(color, price / carat, data = diamonds, geom = "jitter", alpha = I(1 / 50))
+qplot(color, price / carat, data = diamonds, geom = "jitter", alpha = I(1 / 200))
+ 
+#histograma
+qplot(carat, data = diamonds, geom = "histogram")
+qplot(carat, data = diamonds, geom = "density") 
+qplot(carat, data = diamonds, geom = "histogram", binwidth = 1, xlim = c(0,3))
+qplot(carat, data = diamonds, geom = "histogram", binwidth = 0.1, xlim = c(0,3))
+qplot(carat, data = diamonds, geom = "histogram", binwidth = 0.01, xlim = c(0,3))
+qplot(carat, data = diamonds, geom = "density", colour = color)
+qplot(carat, data = diamonds, geom = "histogram", fill = color) 
+ 
+#barchats
+qplot(color, data = diamonds, geom = "bar")
+qplot(color, data = diamonds, geom = "bar", weight = carat) + scale_y_continuous("carat")
+ 
+##Time series with line and path plots 
+ 
+qplot(date, unemploy / pop, data = economics, geom = "line")
+## el primer argumento te dice el nombre del eje x, el segundo del y
+## el tercero de donde sacar los datos y el cuarto que tipo de grafico deseas
+ 
+qplot(date, uempmed, data = economics, geom = "line")
+ 
+ 
+year <- function(x) as.POSIXlt(x)$year + 1900
+ 
+qplot(unemploy / pop, uempmed, data = economics,
+      geom = c("point", "path"))
+ 
+##grafica de puntos que esta unida por unas lineas.
+ 
+qplot(unemploy / pop, uempmed, data = economics,
+      geom = "path", colour = year(date)) + scale_size_area()
+ 
+##A esta grafica se le agrego color respecto a la variable de año 
+ 
+##FACETING
+ 
+##opciones para controlar la apariencia de los graficos
+ 
+ 
+qplot(carat, data = diamonds, facets = color ~ .,
+      geom = "histogram", binwidth = 0.1, xlim = c(0, 3))
+ 
+qplot(carat, ..density.., data = diamonds, facets = color ~ .,
+      geom = "histogram", binwidth = 0.1, xlim = c(0, 3))
+ 
+ 
+qplot(
+  +   carat, price, data = dsmall,
+  +   xlab = "Price ($)", ylab = "Weight (carats)",
+  + main = "Price-weight relationship" +)
+ 
+##Gráfica de dispersion, datos de dsmall, con las etiquetas en x Price y en y
+##Weight el titulo es Price-weight relationship
+ 
+qplot(
+  +    carat, price/carat, data = dsmall,
+  +    ylab = expression(frac(price,carat)),
+  +    xlab = "Weight (carats)",
+  +    main="Small diamonds",
+  +    xlim= c(.2,1) +)
+ 
+## Mismas indicaciones de la anterior con limites en el eje x
+ 
+qplot(carat, price, data = dsmall, log = "xy")
+ 
+##La funcion log registra os ejes, en este caso ambos
+ 
+### 3.1 ###
+ 
+plot((0:20)*pi/10, sin((0:20)*pi/10))
+plot((1:30)*0.92, sin((1:30)*0.92))
+attach(elasticband)
+plot(distance ~ stretch)
+plot(ACT ~ Year, data=austpop, type="l")
+plot(ACT ~ Year, data=austpop, type="b")
+attach(austpop)
+plot(spline(Year, ACT), type="l") # Fit smooth curve through points
+detach(austpop) # In S-PLUS, specify detach(â€œaustpopâ€)
+# 3.1.1 #  
+ 
+plot(hills) # Has the same effect as pairs(hills)
+ 
+### 3.2 ###
+ 
+par(cex=1.25) # character expansion increases the text and plot symbol size 25% above the default. 
+oldpar <- par(cex=1.25, mex=1.25) # mex=1.25 expands the margin by 25%
+attach(elasticband)
+oldpar <- par(cex=1.5)
+plot(distance ~ stretch)
+par(oldpar) # Restores the earlier settings
+detach(elasticband)
+# Inside a function specify, e.g.
+oldpar <- par(cex=1.25)
+on.exit(par(oldpar))
+ 
+# 3.2.1 #
+ 
+par(mfrow=c(2,2), pch=16)
+attach(Animals) # This dataset is in the MASS package, which must be attached
+plot(body, brain)
+plot(sqrt(body), sqrt(brain))
+plot((body)^0.1, (brain)^0.1)
+plot(log(body),log(brain))
+detach(Animals)
+par(mfrow=c(1,1), pch=1) # Restore to 1 figure per page
+ 
+ 
+# 3.2.2 # 
+ 
+The R for Windows functions win.graph() or x11() that set up the Windows
+screen take the parameters width (in inches), height (in inches) and pointsize (in 1/72 of an inch). The
+setting of pointsize (default =12) determines character heights. It is the relative sizes of these parameters that
+matter for screen display or for incorporation into Word and similar programs
+ 
+### 3.3 ### 
+ 
+> primates
+Bodywt Brainwt
+Potar monkey 10.0 115
+Gorilla 207.0 406
+Human 62.0 1320
+Rhesus monkey 6.8 179
+Chimp 52.2 440
+attach(primates) # Needed if primates is not already attached.
+plot(Bodywt, Brainwt)
+text(x=Bodywt, y=Brainwt, labels=row.names(primates), pos=4)
+# pos=4 positions text to the right of the point
+ 
+Here is the R code for Figure 7B:
+  plot(x=Bodywt, y=Brainwt, pch=16,
+       xlab="Body weight (kg)", ylab="Brain weight (g)",
+       xlim=c(0,280), ylim=c(0,1350))
+# Specify xlim so that there is room for the labels
+text(x=Bodywt, y=Brainwt, labels=row.names(primates), pos=4)
+detach(primates)
+To place the text to the left of the points, specify
+text(x=Bodywt, y=Brainwt, labels=row.names(primates), pos=2)
+ 
+# 3.3.1 #
+ 
+For plot() and points() the parameter cex (â€œcharacter expansionâ€) controls the size, while col (â€œcolourâ€)
+controls the colour of the plotting symbol. The parameter pch controls the choice of plotting symbol.
+The parameters cex and col may be used in a similar way with text(). Try
+plot(1, 1, xlim=c(1, 7.5), ylim=c(1.75,5), type="n", axes=F, xlab="",
+     ylab="") # Do not plot points
+box()
+points(1:7, rep(4.5, 7), cex=1:7, col=1:7, pch=0:6)
+text(1:7,rep(3.5, 7), labels=paste(0:6), cex=1:7, col=1:7)
+The following, added to the plot that results from the above three statements, demonstrates other choices of pch.
+points(1:7,rep(2.5,7), pch=(0:6)+7) # Plot symbols 7 to 13
+text((1:7), rep(2.5,7), paste((0:6)+7), pos=4) # Label with symbol number
+points(1:7,rep(2,7), pch=(0:6)+14) # Plot symbols 14 to 20
+text((1:7), rep(2,7), paste((0:6)+14), pos=4) # Labels with symbol number 
+ 
+A variety of color palettes are available. Here is a function that displays some of the possibilities:
+  view.colours <- function(){
+    plot(1, 1, xlim=c(0,14), ylim=c(0,3), type="n", axes=F,
+         xlab="",ylab="")
+    text(1:6, rep(2.5,6), paste(1:6), col=palette()[1:6], cex=2.5)
+    text(10, 2.5, "Default palette", adj=0)
+    rainchars <- c("R","O","Y","G","B","I","V")
+    text(1:7, rep(1.5,7), rainchars, col=rainbow(7), cex=2.5)
+    text(10, 1.5, "rainbow(7)", adj=0)
+    cmtxt <- substring("cm.colors", 1:9,1:9)
+    # Split â€œcm.colorsâ€ into its 9 characters
+    text(1:9, rep(0.5,9), cmtxt, col=cm.colors(9), cex=3)
+    text(10, 0.5, "cm.colors(9)", adj=0)
+  }
+To run the function, enter
+view.colours()
+ 
+# 3.3.2 # 
+ 
+Adding Text in the Margin
+mtext(side, line, text, ..) adds text in the margin of the current plot
+ 
+### 3.4 ### 
+ 
+identify() labels points. One positions the cursor near the point that is to be identified, and clicks the left mouse
+button.
+locator() prints out the co-ordinates of points. One positions the cursor at the location for which coordinates are
+required, and clicks the left mouse button.
+A click with the right mouse button signifies that the identification or location task is complete, unless the
+setting of the parameter n is reached first. For identify() the default setting of n is the number of data
+points, while for locator() the default setting is n = 500.
+ 
+# 3.4.1 #
+ 
+identify()
+This function requires specification of a vector x, a vector y, and a vector of text strings that are available for
+use a labels. The data set florida has the votes for the various Presidential candidates, county by county in 
+25
+the state of Florida. We plot the vote for Buchanan against the vote for Bush, then invoking identify() so
+that we can label selected points on the plot.
+attach(florida)
+plot(BUSH, BUCHANAN, xlab=â€Bushâ€, ylab=â€Buchananâ€)
+identify(BUSH, BUCHANAN, County)
+detach(florida)
+ 
+# 3.4.2 # 
+ 
+locator()
+Left click at the locations whose coordinates are required
+attach(florida) # if not already attached
+plot(BUSH, BUCHANAN, xlab=â€Bushâ€, ylab=â€Buchananâ€)
+locator()
+detach(florida)
+The function can be used to mark new points (specify type=â€pâ€) or lines (specify type=â€lâ€) or both points
+and lines (specify type=â€bâ€)
+ 
+### 3.5 ###
+ 
+# 3.5.1 #
+ 
+Histograms and density plots
+Here is the code used to plot the histogram in Figure 10A.
+attach(possum)
+here <- sex == "f"
+hist(totlngth[here], breaks = 72.5 + (0:5) * 5, ylim = c(0, 22),
+     xlab="Total length", main ="A: Breaks at 72.5, 77.5, ...")
+detach(possum)
+ 
+The following will give a density plot:
+  attach(possum)
+plot(density(totlngth[here]),type="l")
+detach(possum)
+ 
+The code for Figure 9B is:
+  attach(possum)
+here <- sex == "f"
+dens <- density(totlngth[here])
+xlim <- range(dens$x)
+ylim <- range(dens$y)
+hist(totlngth[here], breaks = 72.5 + (0:5) * 5, probability = TRUE,
+     xlim = xlim, ylim = ylim, xlab="Total length", main="")
+lines(dens)
+detach(possum)
+ 
+# 3.5.3 #
+ 
+Boxplotes 
+ 
+Figure 10: Boxplot of female possum lengths, with additional labelling
+information.
+The code for the boxplot is
+attach(possum)
+boxplot(totlngth[here], horizontal=TRUE)
+rug(totlngth[here], side=1)
+detach(possum)
+ 
+# 3.5.4 # 
+ 
+Normal probability plots : qqnorm(y) gives a normal probability plot of the elements of y. The points of this plot will lie approximately
+on a straight line if the distribution is Normal.
+In order to calibrate the eye to recognise plots that indicate nonnormal
+variation, it is helpful to do several normal probability plots for random samples of the relevant size
+from a normal distribution.
+x11(width=8, height=6) # This is a better shape for this plot
+27
+attach(possum)
+here <- sex == "f"
+par(mfrow=c(2,4)) # A 2 by 4 layout of plots
+y <- totlngth[here]
+qqnorm(y,xlab="", ylab="Length", main="Possums")
+for(i in 1:7)qqnorm(rnorm(43),xlab="", ylab="Simulated lengths",
+                    main="Simulated")
+detach(possum)
+# Before continuing, type dev.off() 
+ 
+#histograma
+attach(possum) here <- sex == "f"
+hist(totlngth[here], breaks = 72.5 + (0:5)        5, ylim = c(0, 22), xlab="Total length", main ="A: Breaks at 72.5, 77.5, ...")
+detach(possum)
+ 
+#other useful plots
+panel.smooth() plots points, then adds a smooth curve through the points. For example:
+attach(ais) here<- sex=="f"
+plot(pcBfat[here]~ht[here], xlab = “Height”, ylab = “% Body fat”) panel.smooth(ht[here],pcBfat[here])
+detach(ais)
+
+
+### Ejercicio 7 ###
+ 
+x <- rchisq(10,1)
+plot(x)
+ 
+y <- rchisq(100,20)
+z <- rchisq(50,3)
+w <- rchisq(99,7)
+plot(y)
+plot(z)
+plot(w)
+ 
+e <- rt(10,1)
+plot(e)
+ 
+a <- rt(200,8)
+b <- rt(49,2)
+c <- rt(33,10)
+ 
+plot(a)
+plot(b)
+plot(c)
+ 
+### Ejercicio 8 ###
+rm(totlngth)
+ 
+ 
+attach(hills)
+here <- distance == "f"
+hist(totlngth[here], breaks = 70 + (0:5) * 5, ylim = c(0, 100),
+     xlab="Total length", main ="A: Breaks at 72.5, 77.5, ...")
+detach(hills)
+ 
+ 
+attach(hills)
+plot(density(totlngth[here]),type="l")
+detach(hills)
+ 
+ 
+ 
+attach(hills)
+here <- distance == "f"
+par(mfrow=c(2,4)) # A 2 by 4 layout of plots
+y <- totlngth[here]
+qqnorm(y,xlab="", ylab="Length", main="Possums")
+for(i in 1:7)qqnorm(rnorm(43),xlab="", ylab="Simulated lengths",
+                    main="Simulated")
+detach(hills)
