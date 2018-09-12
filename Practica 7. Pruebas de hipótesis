@@ -1,0 +1,54 @@
+x<-c(42.2,42.6,43.3,43.5,43.7,44.1,44.9,45.3,45.7,45.7,45.9,46,46.2,46.2,46.8,
+     46.8,47.1,47.2)
+y<-c(44,44,44,45,45,46,46,46,47,48,48,48,47,48,48,49,49,49)
+
+modelo <- lm(y~x) ##plantea la informacion del modelo lineal
+summary(modelo)  ##sumario del modelo
+#
+anova(modelo)#tabla anova del modelo
+show(modelo)## elementos del modelo
+
+#(intercept) es b0 y x es la b1
+
+### la sbgorro1 =0.07806 (std. error)
+# p-value es 2.432e-10
+# el parametro de interes es b1 , debido a que p-value es un va?los menor a 0.05 se acepta la 
+## hipotesis alternativa
+
+##Ejercicio 3
+a<-c(635,644,711,708,836,820,810,870,856,923,878,937,948)
+b<-c(100,93,88,84,77,75,74,63,57,55,47,43,38)
+mod3 <- lm(b~a)
+
+##Proporcion de la variacion observada puede ser atribuida al mod 3?
+#Adjusted r-squared = 88.28
+summary(mod3)
+## calcule la desv estandar estimada
+##0.01837
+
+## calcule intervalo de confianza con 95% de la variacion de y con un aumento en una unidad de x
+#qt(alpha/2, n-2 =-2.20 con esto se calcula t
+qt(.025,11)
+##b1+- t*sb para el intervalo de confianza
+-0.17563+2.200985*0.01837
+
+-0.17563-2.200985*0.01837
+#La variacion se encuentra entra:
+##(-.21,-.13)
+
+##Ejercicio 2
+m<-c(5,12,14,17,23,30,40,47,55,67,72,81,96,112,127)###vol. precipitacion pluvial
+n<-c(4,10,13,15,15,25,27,46,38,46,53,70,82,99,100)## vol. escurrimiento 
+mod2 <- lm(n~m)
+summary(mod2)
+anova(mod2)
+## Existe una relacion util entre la precipitaciony el escurrimiento
+## Tiene una significacia muy alta por lo tanto si hay una relacion util
+## Calcule el intervalo de confianza con 95% 
+qt(.025,13)
+
+0.82697-2.160369*0.03652
+
+0.82697+2.160369*0.03652
+
+##(0.7480733,0.9058667)
