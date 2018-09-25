@@ -1,0 +1,214 @@
+install.packages("UsingR")
+require(UsingR)
+
+##En todos los ejercicios interpreten B1
+##1. Ajustar un modelo de regresi??n lineal al conjunto de datos padre.son 
+##con el padre (fheight) como el predictor y el hijo (sheight) como el resultado. 
+##Proporcione un valor de p para el coeficiente de pendiente y realice el prueba de hipotesis.
+padre<- father.son[,"fheight"]
+hijo<- father.son[,"sheight"]
+modelo<- lm(padre~hijo)
+modelo
+show(modelo)
+summary(modelo)
+anova(modelo)
+
+##EL p-value es 2.2e-16 debido a que p-value es un valos menor a 0.05 se acepta la 
+## hipotesis alternativa
+## Tiene una significacia muy alta por lo tanto si hay una relacion util
+
+## 2.  Con base en la la pregunta 1. Interprete ambos parametros. 
+## La b1 es: 0.4889  por lo tanto la recta de x y y tiene una pendiente positiva 
+## La hipotesis nula planet que b1=0, la alternativa que b1 es diferente de 0
+
+##3. Con base en la pregunta 1. Predecir la altura del hijo si la altura del 
+##padre es de 80 pulgadas. ??Podr??as recomendar esta predicci??n? ??Por qu?? s?? o por qu?? no?
+df1<- data.frame(hijo=80)
+predict(modelo, df1, interval ="prediction")
+
+## La prediccion se encuentra entre 68.52013 77.91878, por lo tanto no se recomienda esta
+## prediccion porque el valor no se encuenta dentro del intervalo
+
+##4. Cargue el conjunto de datos mtcars. Ajuste una regresi??n lineal 
+##con millas por gal??n como resultado y caballos de fuerza como el predictor. 
+##Interpreta tus coeficientes.
+
+data(mtcars)
+show(mtcars)
+
+hp<-mtcars[,"hp"]  
+mpg<-mtcars[,"mpg"]
+
+modelo2<- lm(mpg~hp)
+show(modelo2)
+summary(modelo2)
+anova(modelo2)
+
+y=30.09886-0.06823*x #recta de regresion
+## tenemos una pendiente negativa y un p value de 1.788e-07 que te dice ques es significativo
+
+##5. Grafique la recta de ajuste de la preg 4 en un diagrama de dispersi?n
+grafica1<- data.frame(hp,mpg)
+ggplot(grafica1, aes(hp,mpg)) +  geom_point() + ggtitle("Grafica de Dispersion") + 
+  geom_smooth(method="lm")
+
+##6. Con base en la preg 4. Pruebe la hip?tesis de que no hay una relaci?n lineal 
+#entre los caballos de fuerza y millas por gal?n.
+#Ho: B1=0.
+#Ha: B1=!0
+
+summary(modelo2)
+
+##El p-value es debido a que p-value 1.788e-07 es un valos menor a 0.05 se acepta la 
+## hipotesis alternativa
+
+
+##7. con base en preg 4. Predecir las millas por gal?n para una potencia de 111.
+
+pot<- data.frame(hp=111)
+predict(modelo2, pot, interval = "prediction")
+
+##La prediccion se encuntra entre 14.4801 30.57094
+
+###8. Ajustar un modelo de regresi?n lineal al conjunto de datos padre.son 
+#con el padre como el predictor y el hijo como el resultado. 
+#Grafiqu? la altura del hijo (eje horizontal) versus los residuales (vertical eje).
+##Ya lo tenemos en el primer inciso
+show(modelo)
+# Y estimada
+yest<- (34.1075+0.4889*hijo)
+yest
+#  residuos 
+res <- (padre-yest)
+res
+# grafica
+
+grafica2<- data.frame(hijo,res)
+ggplot(grafica2, aes(hijo,res)) + 
+  geom_point() + ggtitle("Grafica hijo y residuos") + geom_smooth(method=lm)
+
+##9. Con base en la pregunta 8.
+#Estime directamente la varianza residual y compare esta estimaci?n con 
+#la salida de lm.
+sum<-summary(modelo) 
+# el error estandar residual: 2.376
+sum
+sum$sigma^2   # y la varianza, su cuadrado: 5.645872
+
+##10. con base preg 8. Obtenga la R al cuadrado para este modelo 
+#y comparela con el summary.
+summary(modelo3)  # R-squared: 0.2513
+
+##11.  Ajuste una regresi?n lineal con millas por gal?n como resultado y
+#caballos de fuerza como el predictor. Grafique la potencia frente a los residuos.
+show(mtcars)
+resul<- mtcars[,"mpg"]
+predictor2<- mtcars[,"cyl"]
+predictor2
+modelo4<- lm(predictor2~resul)
+modelo4
+show(modelo4)
+# calcular Y estimada
+yestimada2<- (11.2607-0.2525*resul)
+yestimada2
+# calcular los residuos 
+residuos <- (predictor2-yestimada2)
+residuos
+### grafica
+potencia<- mtcars[,"hp"] 
+df4<- data.frame(potencia,residuos)
+df4
+ggplot(df4, aes(potencia,residuos)) + 
+  geom_point() + 
+  geom_smooth(method=lm)
+##12. con base preg 11. Estime directamente la varianza residual 
+suma<- summary(mdmt) # el error estandar residual: 0.95
+suma
+suma$sigma^2   # y la varianza, su cuadrado: .9024651
+
+##13. con base preg 11. obtenga la R al cuadrado para este modelo.
+summary(mdmt)  # R-squared: 0.7262
+
+##Intervalos de Confianza
+
+### 1 ###
+
+#y predictor /// x resultado
+
+data(father.son)
+show(father.son)
+y <- c(father.son[,1])
+x <-c(father.son[,2])
+model1 <- lm(y~x)
+show(model1)
+# El resultado es 0.4889 (B1), por lo que con este valor podemos decir que los datos 
+# muestran una relaciÃ³n real positiva.
+
+### 2 ###
+
+d1 <- data.frame(x)
+predict(model1, d1, interval="confidence")
+confint(model1)
+
+
+
+### 3 ###
+
+d2 <- data.frame(x=mean(x))
+predict(model1, d2, interval="prediction")
+
+library(ggplot2)
+
+datos <- data.frame(x,y)
+plot(datos, xlab="resultado", ylab="predictor")
+
+abline(model1)
+
+### 4 ###
+
+x<- mtcars[, 1]
+
+x
+
+y<- mtcars[,4]
+
+y
+
+mt1<- lm(y~x)
+
+show(mt1)
+
+#el coeficiente de potencia de los caballos de fuerza es de 324.08
+
+
+### 5 ###
+
+newx <- data.frame(x)
+
+predict(mt1, newx, interval="confidence")
+
+confint(mt1)
+
+### 6 ###  
+
+newx <- data.frame(resultado=seq(10,35))
+
+IC<-predict(mt1, newx, interval="prediction")
+
+
+### 7 ###
+
+install.packages("ggplot2")
+
+library(ggplot2)
+
+datos<- data.frame(x,y)
+
+
+plot(datos, xlab="Resultado", ylab="Predictor")
+
+abline(mgcf)
+
+lines(newx$resultado, IC[,2],lty=5)
+
+lines(newx$resultado, IC[,3],lty=5)
